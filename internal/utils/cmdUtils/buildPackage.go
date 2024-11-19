@@ -1,8 +1,10 @@
 package utils_cmd
 
 import (
+	"fmt"
 	"path/filepath"
 
+	"github.com/Uh-little-less-dum/dev-cli/internal/utils_logger"
 	"github.com/charmbracelet/log"
 	"github.com/spf13/viper"
 )
@@ -14,5 +16,5 @@ func BuildPackage(packageName string, packageRootPath ...string) {
 	p = append(p, packageRootPath...)
 	fp := filepath.Join(p...)
 	PipeCommand(fp, "pnpm", "build")
-	log.Infof("Built %s successfully", packageName)
+	utils_logger.LogStageSuccess(fmt.Sprintf("Built %s successfully", packageName))
 }

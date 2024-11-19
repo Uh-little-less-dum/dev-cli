@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/charmbracelet/log"
+	"github.com/Uh-little-less-dum/dev-cli/internal/utils_logger"
 	"github.com/spf13/viper"
 )
 
@@ -28,5 +28,6 @@ func ClearGeneratedTypes() {
 	_, err = f.Write([]byte("export type JUST_TO_AVOID_ERROR = {}"))
 	handleError(err)
 	f.Close()
-	log.Info("Cleared automatically generated types at types/src/generated. This directory can now be populated.")
+
+	utils_logger.LogStageSuccess("Cleared automatically generated types at types/src/generated. This directory can now be populated.")
 }

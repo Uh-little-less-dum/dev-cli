@@ -3,6 +3,8 @@ package pathutils
 import (
 	"os"
 	"path/filepath"
+
+	"github.com/spf13/viper"
 )
 
 func EnsureDirExists(p string) error {
@@ -23,3 +25,7 @@ func EnsureFileExists(p string) (*os.File, error) {
 // func GetRelativePath(fromPath string, toPath string) {
 // 	filepath.Rel(fromPath, targPath)
 // }
+
+func GetDevRoot() string {
+	return viper.GetViper().GetString("devRoot")
+}

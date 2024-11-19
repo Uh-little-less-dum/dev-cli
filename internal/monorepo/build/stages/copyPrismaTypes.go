@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 
 	utils_io "github.com/Uh-little-less-dum/dev-cli/internal/utils/ioUtils"
-	"github.com/charmbracelet/log"
+	"github.com/Uh-little-less-dum/dev-cli/internal/utils_logger"
 	"github.com/spf13/viper"
 )
 
@@ -13,5 +13,6 @@ func CopyPrismaTypes() {
 	inputPath := filepath.Join(rootDir, "node_modules", ".prisma", "client", "index.d.ts")
 	outputPath := filepath.Join(rootDir, "packages", "types", "src", "database.d.ts")
 	utils_io.CopyFile(inputPath, outputPath)
-	log.Info("Copied prisma types to the types package.")
+
+	utils_logger.LogStageSuccess("Copied prisma types to the types package.")
 }

@@ -3,7 +3,8 @@ package monorepo_build_stages
 import (
 	"path/filepath"
 
-	outpututils_generate_tunnel "github.com/Uh-little-less-dum/dev-cli/internal/utils/outputUtils/generateTunnel"
+	utils_output "github.com/Uh-little-less-dum/dev-cli/internal/utils/outputUtils"
+	"github.com/Uh-little-less-dum/dev-cli/internal/utils_logger"
 	"github.com/charmbracelet/log"
 	"github.com/spf13/viper"
 )
@@ -17,7 +18,7 @@ func GatherApiTypes() {
 	targetPath := filepath.Join(rootDir, "packages", "api", "src", "types.ts")
 	globPattern := filepath.Join(rootDir, "packages", "api", "src", "{trpcTypes,individualTypesForDocumentation}", "**", "*.{ts,tsx}")
 
-	g := outpututils_generate_tunnel.NewGenerator(targetPath, globPattern, filepath.Join(rootDir, "packages", "api", "src"), "asType")
+	g := utils_output.NewGenerator(targetPath, globPattern, filepath.Join(rootDir, "packages", "api", "src"), utils_output.ExportAsType)
 	g.Generate()
-	log.Info("Wrote tunnel files in the api package.")
+	utils_logger.LogStageSuccess("Wrote tunnel files in the api package.")
 }

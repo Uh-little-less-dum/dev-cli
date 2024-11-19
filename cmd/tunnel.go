@@ -4,8 +4,8 @@ import (
 	"os"
 
 	init_helpers "github.com/Uh-little-less-dum/dev-cli/internal/initHelpers"
-	outpututils_generate_tunnel "github.com/Uh-little-less-dum/dev-cli/internal/utils/outputUtils/generateTunnel"
-	"github.com/charmbracelet/log"
+	utils_error "github.com/Uh-little-less-dum/dev-cli/internal/utils/errorHandler"
+	utils_output "github.com/Uh-little-less-dum/dev-cli/internal/utils/outputUtils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -26,33 +26,27 @@ var TunnelCmd = &cobra.Command{
 		} else {
 			glob = "**/*.{ts,tsx}"
 		}
-		f := viper.GetViper().GetString("format")
-		if f == "" {
-			f = "asType"
-		}
 		globRoot := viper.GetViper().GetString("cwd")
-		generator := outpututils_generate_tunnel.NewGenerator(fp, glob, globRoot, f)
+		format := utils_output.GetTunnelFormatFromViper()
+		generator := utils_output.NewGenerator(fp, glob, globRoot, format)
 		generator.Generate()
 	},
+}
+
+func handleBoolFlag(v *viper.Viper, viperKey, flagString, desc string, defaultVal bool) {
+	TunnelCmd.Flags().Bool(flagString, defaultVal, desc)
+	err := v.BindPFlag(viperKey, TunnelCmd.Flags().Lookup(flagString))
+	utils_error.HandleError(err)
 }
 
 func init() {
 	cobra.OnInitialize(init_helpers.InitCmd())
 	v := viper.GetViper()
-	TunnelCmd.Flags().StringP("format", "f", "asType", "Indicates the format of the tunnel exports. Options: asType, basic")
-	err := v.BindPFlag("format", TunnelCmd.Flags().Lookup("format"))
-	if err != nil {
-		log.Fatal(err)
-	}
+	handleBoolFlag(v, "asType", "asType", "Generate tunnel exports as type only exports.", false)
+	handleBoolFlag(v, "allWithoutExtension", "allWithoutExtension", "Generate tunnel exports using the '* from' syntax, but without a file extension.", false)
 	d, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
+	utils_error.HandleError(err)
 
 	TunnelCmd.Flags().String("cwd", d, "Indicates the format of the tunnel exports. Options: asType, basic")
-	err = v.BindPFlag("format", TunnelCmd.Flags().Lookup("format"))
-	if err != nil {
-		log.Fatal(err)
-	}
 	RootCmd.AddCommand(TunnelCmd)
 }

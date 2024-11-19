@@ -11,6 +11,7 @@ import (
 	"github.com/Uh-little-less-dum/dev-cli/internal/monorepo/commonpaths"
 	schemas_package_json "github.com/Uh-little-less-dum/dev-cli/internal/schemas"
 	pathutils "github.com/Uh-little-less-dum/dev-cli/internal/utils/filePathUtils"
+	"github.com/Uh-little-less-dum/dev-cli/internal/utils_logger"
 	"github.com/charmbracelet/log"
 	"github.com/spf13/viper"
 	"github.com/tidwall/sjson"
@@ -137,7 +138,7 @@ func getPackageItem(devRoot, packageJsonPath string) InternalPackageItem {
 }
 
 // Writes current package data to utilities/src/utils/buildStaticData.json based on their current package.json.
-func WriteCurrentPackageData() {
+func WriteCurrentPackageData() []InternalPackageItem {
 	rootDir := viper.GetViper().GetString("devRoot")
 	files := pathutils.GetInternalPackageJsonPaths()
 
@@ -162,6 +163,7 @@ func WriteCurrentPackageData() {
 
 	err = os.WriteFile(outputPath, newData, 0666)
 	handleError(err)
-	log.Info("Wrote internalPackageData to utilities/src/utils/buildStaticData.json successfully.")
 
+	utils_logger.LogStageSuccess("Wrote internalPackageData to utilities/src/utils/buildStaticData.json successfully.")
+	return items
 }

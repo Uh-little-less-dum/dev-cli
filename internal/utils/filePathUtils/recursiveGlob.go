@@ -8,13 +8,24 @@ import (
 	"github.com/gobwas/glob"
 )
 
-func RecursiveGlob(rootDir, globPattern string) ([]string, error) {
+func IsDirectory(path string) bool {
+	fileInfo, err := os.Stat(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return fileInfo.IsDir()
+}
+
+// Returns a list of *absolute* paths to files matching the glob.
+func RecursiveGlob(rootDir, globPattern, ignoreFile string, noDir bool) ([]string, error) {
 	log.WithPrefix("glob root").Debug(rootDir)
 	g := glob.MustCompile(globPattern)
 	files := []string{}
 	err := filepath.Walk(rootDir, func(path string, f os.FileInfo, err error) error {
-		if g.Match(path) {
-			files = append(files, path)
+		if (path != "") && (g.Match(path)) && (ignoreFile != path) {
+			if (!noDir) || (!IsDirectory(path)) {
+				files = append(files, path)
+			}
 		}
 		return nil
 	})
