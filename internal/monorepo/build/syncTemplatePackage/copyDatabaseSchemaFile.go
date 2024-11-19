@@ -1,4 +1,4 @@
-package monorepo_sync_template
+package monorepo_template_app
 
 import (
 	"os"
@@ -7,6 +7,7 @@ import (
 
 	utils_error "github.com/Uh-little-less-dum/dev-cli/internal/utils/errorHandler"
 	pathutils "github.com/Uh-little-less-dum/dev-cli/internal/utils/filePathUtils"
+	"github.com/Uh-little-less-dum/dev-cli/internal/utils_logger"
 )
 
 // Copies database schema file to the template app. This does not necessarily have to come after the generation of the prisma client, as this is only applied to the pre-transpiled template app.
@@ -26,4 +27,5 @@ func CopyDatabaseSchemaFile() {
 	}
 	err = os.WriteFile(filepath.Join(devRoot, "apps", "template", "src", "database", "schema.prisma"), []byte(strings.Join(lines, "\n")), 0666)
 	utils_error.HandleError(err)
+	utils_logger.LogTemplateAppMsg("Copied schema file to the template package.")
 }
