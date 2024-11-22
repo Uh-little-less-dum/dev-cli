@@ -4,14 +4,13 @@ Copyright © 2024 Andrew Mueller aiglinski414@gmail.com
 package cmd
 
 import (
-	"os"
-
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"os"
 )
 
 var RootCmd = &cobra.Command{
-	Use:   "devCli",
+	Use:   "godum",
 	Short: "Useful utilities that power the ULLD monorepo and build process.",
 	Long:  `Useful utilities that power the ULLD monorepo and build process.`,
 }

@@ -7,10 +7,11 @@ import (
 )
 
 var TestRouteCommand = &cobra.Command{
-	Use:   "test",
-	Short: "Test command route",
-	Long:  `Test individual parts of the build script. This should never be used apart from during internal development, because this will just execute the most random shit.`,
-	Args:  cobra.MaximumNArgs(2),
+	Use:    "test",
+	Short:  "Test command route. You will regret using this.",
+	Long:   `Test individual parts of the build script. This should never be used apart from during internal development, because this will just execute the most random shit.`,
+	Hidden: true,
+	Args:   cobra.MaximumNArgs(2),
 
 	Run: func(cmd *cobra.Command, args []string) {
 		monorepo_build.BuildMonorepo()
@@ -19,5 +20,5 @@ var TestRouteCommand = &cobra.Command{
 
 func init() {
 	cobra.OnInitialize(init_helpers.InitCmd())
-	RootCmd.AddCommand(buildMonorepoCommand)
+	RootCmd.AddCommand(TestRouteCommand)
 }
