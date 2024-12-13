@@ -1,17 +1,14 @@
 package monorepo_build_stages
 
 import (
-	"fmt"
 	"os"
-	"path/filepath"
-	"reflect"
 	"strings"
 	"sync"
 
 	"github.com/Uh-little-less-dum/dev-cli/internal/monorepo/commonpaths"
-	schemas_package_json "github.com/Uh-little-less-dum/dev-cli/internal/schemas"
 	pathutils "github.com/Uh-little-less-dum/dev-cli/internal/utils/filePathUtils"
 	"github.com/Uh-little-less-dum/dev-cli/internal/utils_logger"
+	schemas_package_json "github.com/Uh-little-less-dum/go-utils/pkg/schemastructs/packageJson"
 	"github.com/charmbracelet/log"
 	"github.com/spf13/viper"
 	"github.com/tidwall/sjson"
@@ -68,7 +65,8 @@ func handleImportPath(p *string, fileTypes *HasFileType) {
 	}
 }
 
-func getSourceType(data schemas_package_json.PackageJSONSchema) SourceLocation {
+// BUG: Fix this now that I've finally cleaned up a bunch of repetitive code.
+func getSourceType(data schemas_package_json.PackageJsonSchema) SourceLocation {
 	log.Debugf("Gathering the InternalPackageItem for %s", data.Name)
 	fileTypes := HasFileType{src: false, dist: false}
 	filesField := data.Files
@@ -86,54 +84,59 @@ func getSourceType(data schemas_package_json.PackageJSONSchema) SourceLocation {
 	} else {
 		sourceType = SrcDir
 	}
-	var exportKeys []reflect.Value
-	if (data.Exports != nil) && (data.Exports.UnionMap != nil) {
-		v := reflect.ValueOf(data.Exports.UnionMap)
-		exportKeys = v.MapKeys()
-		for _, k := range exportKeys {
-			keyString := fmt.Sprintf("%s", k)
-			exportVal := data.Exports.UnionMap[keyString]
-			if (exportVal.String != nil) && (*exportVal.String != "") {
-				handleImportPath(exportVal.String, &fileTypes)
-			} else {
-				handleImportPath(exportVal.ExportClass.Node, &fileTypes)
-				handleImportPath(exportVal.ExportClass.Import, &fileTypes)
-				handleImportPath(exportVal.ExportClass.Require, &fileTypes)
-				handleImportPath(exportVal.ExportClass.Types, &fileTypes)
-			}
-		}
-	}
+	log.Fatal("Fix this.")
+	// var exportKeys []reflect.Value
+	// if (data.Exports != nil) && (data.Exports.UnionMap != nil) {
+	// 	v := reflect.ValueOf(data.Exports.UnionMap)
+	// 	exportKeys = v.MapKeys()
+	// 	for _, k := range exportKeys {
+	// 		keyString := fmt.Sprintf("%s", k)
+	// 		exportVal := data.Exports.UnionMap[keyString]
+	// 		if (exportVal.String != nil) && (*exportVal.String != "") {
+	// 			handleImportPath(exportVal.String, &fileTypes)
+	// 		} else {
+	// 			handleImportPath(exportVal.ExportClass.Node, &fileTypes)
+	// 			handleImportPath(exportVal.ExportClass.Import, &fileTypes)
+	// 			handleImportPath(exportVal.ExportClass.Require, &fileTypes)
+	// 			handleImportPath(exportVal.ExportClass.Types, &fileTypes)
+	// 		}
+	// 	}
+	// }
 	if fileTypes.dist {
 		return DistDir
 	}
 	return sourceType
 }
 
+// BUG: Fix this now that everything has been cleaned up.
 func getPackageItem(devRoot, packageJsonPath string) InternalPackageItem {
 	b, err := os.ReadFile(packageJsonPath)
 	handleError(err)
-	fileData, err := schemas_package_json.UnmarshalPackageJSONSchema(b)
-	handleError(err)
-	relPath, err := filepath.Rel(devRoot, filepath.Dir(packageJsonPath))
-	handleError(err)
+	log.Info(b)
+	log.Info("devRoot ", devRoot)
+	log.Fatal("Fix this.")
+	// fileData, err := schemas_package_json.PackageJsonSchema()
+	// handleError(err)
+	// relPath, err := filepath.Rel(devRoot, filepath.Dir(packageJsonPath))
+	// handleError(err)
 
-	var repoType InternalPackageType
-	if strings.HasPrefix(relPath, "apps") {
-		repoType = AppRepo
-	} else {
-		repoType = PackageRepo
-	}
+	// var repoType InternalPackageType
+	// if strings.HasPrefix(relPath, "apps") {
+	// 	repoType = AppRepo
+	// } else {
+	// 	repoType = PackageRepo
+	// }
 
-	srcData := getSourceType(fileData)
+	// srcData := getSourceType(fileData)
 
 	return InternalPackageItem{
-		Name:            fileData.Name,
-		CurrentVersion:  fileData.Version,
-		RelativeDirPath: relPath,
-		RepoType:        repoType,
-		HasPluginConfig: pathutils.Exists(filepath.Join(filepath.Dir(packageJsonPath), "pluginConfig.ulld.json")),
-		SourceLocation:  srcData,
-		IsTranspiled:    srcData == DistDir,
+		// Name:            fileData.Name,
+		// CurrentVersion:  fileData.Version,
+		// RelativeDirPath: relPath,
+		// RepoType:        repoType,
+		// HasPluginConfig: pathutils.Exists(filepath.Join(filepath.Dir(packageJsonPath), "pluginConfig.ulld.json")),
+		// SourceLocation:  srcData,
+		// IsTranspiled:    srcData == DistDir,
 	}
 }
 

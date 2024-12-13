@@ -20,5 +20,5 @@ var TestRouteCommand = &cobra.Command{
 
 func init() {
 	cobra.OnInitialize(init_helpers.InitCmd())
-	RootCmd.AddCommand(TestRouteCommand)
+	RootCmd.AddCommand(GatherCliDataCommand)
 }

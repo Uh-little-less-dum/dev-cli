@@ -4,9 +4,11 @@ Copyright © 2024 Andrew Mueller aiglinski414@gmail.com
 package cmd
 
 import (
+	"os"
+
+	"github.com/charmbracelet/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"os"
 )
 
 var RootCmd = &cobra.Command{
@@ -23,6 +25,10 @@ func Execute() {
 }
 
 func init() {
+	RootCmd.AddCommand(JsonSchemaToStructCmd)
 	RootCmd.PersistentFlags().BoolP("verbose", "v", false, "Output more verbose logs.")
-	viper.GetViper().BindPFlag("verbose", RootCmd.PersistentFlags().Lookup("verbose"))
+	err := viper.GetViper().BindPFlag("verbose", RootCmd.PersistentFlags().Lookup("verbose"))
+	if err != nil {
+		log.Fatal(err)
+	}
 }

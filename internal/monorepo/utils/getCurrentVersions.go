@@ -42,6 +42,7 @@ type InternalDepData struct {
 	DependencyType string
 }
 
+// FIX: This is almost surely not working.
 func GetInternalDependencies(j gjson.Result) []InternalDepData {
 	var data []InternalDepData
 	devItems := j.Get("devDendencies.@ulld/*").Array()
