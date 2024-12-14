@@ -2,7 +2,7 @@ package cmd
 
 import (
 	init_helpers "github.com/Uh-little-less-dum/dev-cli/internal/initHelpers"
-	monorepo_build "github.com/Uh-little-less-dum/dev-cli/internal/monorepo/build"
+	monorepo_build_stages "github.com/Uh-little-less-dum/dev-cli/internal/monorepo/build/stages"
 	"github.com/spf13/cobra"
 )
 
@@ -14,11 +14,11 @@ var TestRouteCommand = &cobra.Command{
 	Args:   cobra.MaximumNArgs(2),
 
 	Run: func(cmd *cobra.Command, args []string) {
-		monorepo_build.BuildMonorepo()
+		monorepo_build_stages.WriteCurrentPackageData()
 	},
 }
 
 func init() {
 	cobra.OnInitialize(init_helpers.InitCmd())
-	RootCmd.AddCommand(GatherCliDataCommand)
+	RootCmd.AddCommand(TestRouteCommand)
 }

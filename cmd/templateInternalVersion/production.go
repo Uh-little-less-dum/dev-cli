@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// BUG: Fix both version manipulation methods. Move much of this functionality to the package.json struct.
 var ToProductionVersionsCmd = &cobra.Command{
 	Use:   "toProduction",
 	Short: "Set template app versions to latest production versions.",
